@@ -1,0 +1,122 @@
+<canvas id="life" width="500" height="500"></canvas>
+<script>
+  // Get the 2D rendering context of the canvas
+  const m = document.getElementById("life").getContext('2d');
+
+  // Function to draw a filled rectangle on the canvas
+  const draw = (x, y, c, s) => {
+    m.fillStyle = c;
+    m.fillRect(x, y, s, s);
+  };
+
+  // Array to store particle objects
+  const particles = [];
+
+  // Function to create a particle object with initial properties
+  const particle = (x, y, c) => {
+    return {
+      "x": x,
+      "y": y,
+      "vx": 0,
+      "vy": 0,
+      "color": c
+    };
+  };
+
+  // Function to generate a random value within a specified range
+  const random = () => {
+    return Math.random() * 400 + 50;
+  };
+
+  // Function to create a group of particles with a specified color
+  const create = (number, color) => {
+    const group = [];
+    for (let i = 0; i < number; i++) {
+      group.push(particle(random(), random(), color));
+      particles.push(group[i]);
+    }
+    return group;
+  };
+
+  // Create particles of different colors
+  const yellow = create(100, "yellow");
+  const green = create(100, "green");
+  const blue = create(100, "blue");
+  const red = create(100, "red");
+
+  // Function to apply rules between particles to simulate behavior
+  const rule = (particles1, particles2, g) => {
+    for (let i = 0; i < particles1.length; i++) {
+      let a = particles1[i];
+      let fx = 0;
+      let fy = 0;
+      for (let j = 0; j < particles2.length; j++) {
+        let b = particles2[j];
+        let dx = a.x - b.x;
+        let dy = a.y - b.y;
+        let d = Math.sqrt(dx * dx + dy * dy);
+        if (d > 0 && d < 80) {
+          let F = g * 1 / d;
+          fx += (F * dx);
+          fy += (F * dy);
+        }
+      }
+      // Update velocity and position of particles
+      a.vx = (a.vx + fx) * 0.5;
+      a.vy = (a.vy + fy) * 0.5;
+      a.x += a.vx;
+      a.y += a.vy;
+
+      // Boundary checks to prevent escaping the screen
+      if (a.x <= 0 || a.x >= 500) {
+        a.vx *= -1;
+        a.x = Math.max(0, Math.min(a.x, 500)); // Keep within canvas bounds
+      }
+      if (a.y <= 0 || a.y >= 500) {
+        a.vy *= -1;
+        a.y = Math.max(0, Math.min(a.y, 500)); // Keep within canvas bounds
+      }
+    }
+  };
+
+  // Function to update the simulation and redraw the canvas
+  const update = () => {
+    // Apply rules for particle interactions
+    rule(yellow, yellow, 0.537);
+    rule(yellow, green, -0.123);
+    rule(yellow, blue, -0.789);
+    rule(yellow, red, -0.988);
+
+    rule(green, yellow, -0.247);
+    rule(green, green, 0.346);
+    rule(green, blue, -0.877);
+    rule(green, red, -0.654);
+
+    rule(blue, yellow, -0.432);
+    rule(blue, green, -0.568);
+    rule(blue, blue, 1);
+    rule(blue, red, -0.012);
+
+    rule(red, yellow, -0.765);
+    rule(red, green, -0.235);
+    rule(red, blue, -0.346);
+    rule(red, red, 0.890);
+
+    // Clear the canvas
+    m.clearRect(0, 0, 500, 500);
+
+    // Draw a black background on the canvas
+    draw(0, 0, "black", 500);
+
+    // Draw particles on the canvas
+    for (i = 0; i < particles.length; i++) {
+      draw(particles[i].x, particles[i].y, particles[i].color, 5);
+    }
+
+    // Request the next animation frame to continue the simulation
+    requestAnimationFrame(update);
+  };
+
+  // Start the simulation
+  update();
+</script>
