@@ -2,7 +2,7 @@
 
 This HTML file is not just any file—it's a canvas of life! Dive into the mesmerizing world of particle interactions and watch as colors dance and play within the confines of your screen.
 
-![meta3](src\images/meta3.gif)
+![meta3](src/images/meta3.gif)
 
 ## How to Use 🚀
 
