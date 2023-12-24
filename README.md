@@ -34,4 +34,4 @@ Feel like tweaking the cosmic balance? Dive into the code and play with the para
 
 ## Credits 🌟
 
-This enchanting code was crafted by taking "particle-life" repository as an insppiration by @hunar4321 .✨
+This enchanting code was crafted by taking "particle-life" repository as an inspiration by @hunar4321 .✨
